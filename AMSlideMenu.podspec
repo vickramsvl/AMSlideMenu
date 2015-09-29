@@ -21,6 +21,6 @@ Works for both iPhone and iPad.
   s.author       = { "Artur Mkrtchyan" => "mkrtarturdev@gmail.com" }
   s.source_files = 'AMSlideMenu/*'
   s.requires_arc = true
-  s.prefix_header_contents = '#define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)'
+  s.prefix_header_contents = '#ifndef\nSYSTEM_VERSION_LESS_THAN(v) #define SYSTEM_VERSION_LESS_THAN(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)\n#endif'
 
 end
