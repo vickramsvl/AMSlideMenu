@@ -66,7 +66,7 @@ typedef enum {
 
 @end
 
-static NSMutableArray *allInstances;
+static NSValue *sharedInstance;
 
 @implementation AMSlideMenuMainViewController
 
@@ -77,14 +77,7 @@ static NSMutableArray *allInstances;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if (!allInstances)
-    {
-        allInstances = [NSMutableArray array];
-    }
-    
-    NSValue *value = [NSValue valueWithNonretainedObject:self];
-    [allInstances addObject:value];
-//    [allInstances addObject:self];
+    sharedInstance = [NSValue valueWithNonretainedObject:self];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleInterfaceOrientationChangedNotification:) name:UIDeviceOrientationDidChangeNotification object:nil];
     initialOrientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -135,14 +128,7 @@ static NSMutableArray *allInstances;
 
 - (void)dealloc
 {
-    NSMutableArray *arr = [allInstances mutableCopy];
-    for (NSValue *value in arr)
-    {
-        AMSlideMenuMainViewController *mainVC = [value nonretainedObjectValue];
-        if (mainVC == self) {
-            [allInstances removeObject:value];
-        }
-    }
+    sharedInstance = nil;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -151,26 +137,14 @@ static NSMutableArray *allInstances;
 #pragma mark - Static methods -
 /*----------------------------------------------------*/
 
-+ (NSArray *)allInstances
++ (AMSlideMenuMainViewController *)sharedInstance
 {
-    return allInstances;
+    return [sharedInstance nonretainedObjectValue];
 }
 
 + (AMSlideMenuMainViewController *)getInstanceForVC:(UIViewController *)vc
 {
-
-    if (allInstances.count == 1)
-        return [allInstances[0] nonretainedObjectValue];
-    
-    for (NSValue *value in allInstances)
-    {
-        AMSlideMenuMainViewController *mainVC = [value nonretainedObjectValue];
-        if (mainVC.currentActiveNVC == vc.navigationController || mainVC.currentActiveNVC == vc)
-        {
-            return mainVC;
-        }
-    }
-    return nil;
+    return  [self sharedInstance];
 }
 
 /*----------------------------------------------------*/

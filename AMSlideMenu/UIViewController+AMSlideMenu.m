@@ -17,10 +17,10 @@
 #pragma mark - Public Actions -
 /*----------------------------------------------------*/
 
-+ (void)load
-{
-    [self swizzleOriginalSelectorWithName:@"viewWillDisappear:" toSelectorWithName:@"my_viewWillDisappear:"];
-}
+//+ (void)load
+//{
+//    [self swizzleOriginalSelectorWithName:@"viewWillDisappear:" toSelectorWithName:@"my_viewWillDisappear:"];
+//}
 
 
 #pragma mark - Swizzle Utils methods
